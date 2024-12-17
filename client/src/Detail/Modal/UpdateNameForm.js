@@ -1,61 +1,54 @@
-import React from 'react';
+import { useState, useEffect } from 'react';
+import { useLanguage } from '../LanguageProvider';
 
-const UpdateNameForm = ({ show, handleClose, data, handlerMap }) => {
- if (!show || !data) return null;
+function UpdateNameForm({ show, handleClose, data, handlerMap }) {
+  const [value, setValue] = useState('');
+  const { t } = useLanguage();
 
- return (
-   <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-     <div className="bg-white rounded-lg p-6 w-96">
-       <form onSubmit={(e) => {
-         e.preventDefault();
-         e.stopPropagation();
-         const formData = new FormData(e.target);
-         const values = Object.fromEntries(formData);
-         handlerMap.updateName({ id: data.id, name: values.name }); // Přidáno ID pro identifikaci seznamu
-         handleClose();
-       }}>
-         <div className="flex justify-between items-center mb-4">
-           <h2 className="text-xl font-bold">Upravit název seznamu</h2>
-           <button
-             type="button"
-             onClick={handleClose}
-             className="text-gray-500 hover:text-gray-700"
-           >
-             ×
-           </button>
-         </div>
-        
-         <div className="mb-4">
-           <label className="block mb-2">Název</label>
-           <input
-             type="text"
-             name="name"
-             defaultValue={data.name}
-             required
-             className="w-full p-2 border rounded"
-             placeholder="Zadejte nový název seznamu"
-           />
-         </div>
-        
-         <div className="flex justify-end gap-2">
-           <button
-             type="button"
-             onClick={handleClose}
-             className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
-           >
-             Zrušit
-           </button>
-           <button
-             type="submit"
-             className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
-           >
-             Uložit
-           </button>
-         </div>
-       </form>
-     </div>
-   </div>
- );
-};
+  useEffect(() => {
+    if (show && data) {
+      setValue(data.name);
+    }
+  }, [show, data]);
+
+  if (!show) return null;
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    handlerMap.updateName({ id: data.id, name: value });
+    handleClose();
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+      <div className="bg-white dark:bg-slate-800 p-6 rounded-lg shadow-xl w-96 transition-colors duration-200">
+        <h3 className="text-lg font-medium mb-4 dark:text-white">{t('editList')}</h3>
+        <form onSubmit={handleSubmit} className="grid gap-4">
+          <input
+            type="text"
+            value={value}
+            onChange={e => setValue(e.target.value)}
+            className="p-2 border rounded dark:bg-slate-700 dark:text-white dark:border-slate-600"
+          />
+          <div className="flex justify-end gap-2">
+            <button
+              type="button"
+              onClick={handleClose}
+              className="px-4 py-2 bg-gray-200 dark:bg-slate-600 rounded hover:bg-gray-300 dark:hover:bg-slate-500 dark:text-white"
+            >
+              {t('cancel')}
+            </button>
+            <button
+              type="submit"
+              className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700"
+            >
+              {t('save')}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
 
 export default UpdateNameForm;

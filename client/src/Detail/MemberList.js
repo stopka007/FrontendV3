@@ -1,35 +1,34 @@
-// MemberList.jsx
 import { useContext, useState } from "react";
 import { DetailContext } from "./DetailProvider";
 import { UserContext } from "../Users/UserProvider";
+import { useLanguage } from "./LanguageProvider";
 import AddMemberForm from "./Modal/AddMemberForm";
 import Member from "./Member";
 
-const MemberList = () => {
+function MemberList() {
   const { lists, activeListId, handlerMap } = useContext(DetailContext);
   const { userMap, userList, loggedInUser } = useContext(UserContext);
+  const { t } = useLanguage();
   const [show, setShow] = useState(false);
 
   const activeList = lists.find(list => list.id === activeListId);
   if (!activeList) return null;
- 
+
   return (
-    <div className="p-4">
+    <div className="p-4 bg-white dark:bg-slate-800 transition-colors duration-200 h-full">
       <div className="flex flex-col gap-2">
         <div className="flex items-center justify-between mb-4">
-          <span className="font-medium">Členové seznamu</span>
+          <span className="font-medium dark:text-white">{t('members')}</span>
           {activeList.owner === loggedInUser && (
             <button
               onClick={() => setShow(true)}
-              className="bg-green-600 text-white px-3 py-1 rounded flex items-center gap-1"
+              className="bg-green-600 text-white px-3 py-1 rounded flex items-center gap-1 hover:bg-green-700 dark:bg-green-600 dark:hover:bg-green-700"
             >
-              Přidat člena +
+              {t('addMember')} +
             </button>
           )}
         </div>
-
-        {/* Vlastník */}
-        <Member 
+        <Member
           key={activeList.owner}
           userData={userMap[activeList.owner]}
           listId={activeListId}
@@ -38,8 +37,7 @@ const MemberList = () => {
           canManage={false}
           loggedInUser={loggedInUser}
         />
-       
-        {/* Seznam členů */}
+
         {activeList.memberList.map((memberId) => (
           <Member
             key={memberId}
@@ -52,11 +50,11 @@ const MemberList = () => {
           />
         ))}
       </div>
-     
+
       <AddMemberForm
         show={show}
-        userList={userList.filter(user => 
-          user.id !== activeList.owner && 
+        userList={userList.filter(user =>
+          user.id !== activeList.owner &&
           !activeList.memberList.includes(user.id)
         )}
         listId={activeListId}
@@ -65,6 +63,6 @@ const MemberList = () => {
       />
     </div>
   );
-};
+}
 
 export default MemberList;

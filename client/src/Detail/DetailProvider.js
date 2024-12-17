@@ -133,8 +133,6 @@ const DetailProvider = ({ children }) => {
       deleteList: ({ listId }) => {
         setLists(lists => {
           const newLists = lists.filter(list => list.id !== listId);
-          
-          // Pokud byl smazán aktivní seznam, nastavíme activeListId na ID prvního dostupného seznamu
           if (listId === activeListId) {
             setActiveListId(newLists.length > 0 ? newLists[0].id : null);
           }
