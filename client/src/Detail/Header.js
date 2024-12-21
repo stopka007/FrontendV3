@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { UserContext } from "../Users/UserProvider.js";
-import { useTheme } from "./ThemeProvider";
-import { useLanguage } from "./LanguageProvider";
+import { useTheme } from "./Extras/ThemeProvider.js";
+import { useLanguage } from "./Extras/LanguageProvider.js";
 
 function Header() {
   const { userList, loggedInUser, setLoggedInUser } = useContext(UserContext);
@@ -13,7 +13,7 @@ function Header() {
       <div className="container mx-auto px-4 py-3">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div className="flex items-center gap-4">
-            <h1 className="text-2xl font-bold dark:text-white">{t('shoppingList')}</h1>
+            <h1 className="text-2xl font-bold dark:text-white">{t('shoppingLists')}</h1>
             <div className="flex gap-2">
               <button
                 onClick={toggleTheme}

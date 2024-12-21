@@ -1,4 +1,4 @@
-import { useLanguage } from "./LanguageProvider";
+import { useLanguage } from "./Extras/LanguageProvider";
 
 function Member({ userData, listId, handlerMap, isOwner, canManage }) {
   const { t } = useLanguage();

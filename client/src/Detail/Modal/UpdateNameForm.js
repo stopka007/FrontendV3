@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useLanguage } from '../LanguageProvider';
+import { useLanguage } from '../Extras/LanguageProvider';
 
 function UpdateNameForm({ show, handleClose, data, handlerMap }) {
   const [value, setValue] = useState('');

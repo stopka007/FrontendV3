@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useLanguage } from "./LanguageProvider";
+import { useLanguage } from "./Extras/LanguageProvider";
 
 function Item({ data, listId, handlerMap }) {
   const [value, setValue] = useState(data.name);

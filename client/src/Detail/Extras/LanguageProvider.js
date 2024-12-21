@@ -4,7 +4,7 @@ const LanguageContext = createContext();
 
 const translations = {
   en: {
-    shoppingList: "Shopping List",
+    shoppingLists: "Shopping Lists",
     addItem: "Add Item",
     showAll: "Show All",
     showUnresolved: "Show Unresolved",
@@ -33,9 +33,10 @@ const translations = {
     item_one: 'Item',
     item_few: 'Items',
     item_many: 'Items',
+    items: "Items",
   },
   cs: {
-    shoppingList: "Nákupní seznam",
+    shoppingLists: "Nákupní seznamy",
     addItem: "Přidat položku",
     showAll: "Zobrazit vše",
     showUnresolved: "Zobrazit nevyřízené",
@@ -64,6 +65,7 @@ const translations = {
     item_one: 'Položka',
     item_few: 'Položky',
     item_many: 'Položek',
+    items: "Položky",
   },
 };
 

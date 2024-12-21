@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import { DetailContext } from "./DetailProvider";
 import { UserContext } from "../Users/UserProvider";
-import { useLanguage } from "./LanguageProvider";
+import { useLanguage } from "./Extras/LanguageProvider";
 import AddMemberForm from "./Modal/AddMemberForm";
 import Member from "./Member";
 

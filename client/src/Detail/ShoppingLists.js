@@ -1,13 +1,15 @@
 import { useContext, useState } from "react";
 import { DetailContext } from "./DetailProvider";
 import { UserContext } from "../Users/UserProvider";
-import { useLanguage } from "./LanguageProvider";
+import { useLanguage } from "./Extras/LanguageProvider";
 import UpdateNameForm from "./Modal/UpdateNameForm";
 import CreateListForm from "./Modal/CreateListForm";
+import ListBarChart from "./Graphs/BarChart";
 
-function Toolbar() {
+function ShoppingLists() {
   const [showUpdateName, setShowUpdateName] = useState(false);
   const [showCreateList, setShowCreateList] = useState(false);
+  const [showChart, setShowChart] = useState(false);
   const { data, lists, activeListId, setActiveListId, handlerMap } = useContext(DetailContext);
   const { loggedInUser } = useContext(UserContext);
   const { t } = useLanguage();
@@ -23,18 +25,27 @@ function Toolbar() {
 
   return (
     <div className="flex flex-col border-2 border-green-500 dark:border-green-400 m-3 p-3 bg-white dark:bg-slate-800 transition-colors duration-200">
+      {showChart && <ListBarChart lists={lists} />}
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-bold dark:text-white">{t('shoppingList')}</h2>
-        <button
-          onClick={() => setShowCreateList(true)}
-          className="px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600 text-sm flex items-center gap-1 dark:bg-green-600 dark:hover:bg-green-700"
-        >
-          {t('newList')} +
-        </button>
+        <h2 className="text-xl font-bold dark:text-white">{t('shoppingLists')}</h2>
+        <div className="flex gap-2">
+          <button
+            onClick={() => setShowCreateList(true)}
+            className="px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600 text-sm flex items-center gap-1 dark:bg-green-600 dark:hover:bg-green-700"
+          >
+            {t('newList')} +
+          </button>
+          <button
+            onClick={() => setShowChart(!showChart)}
+            className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 text-sm flex items-center gap-1 dark:bg-blue-600 dark:hover:bg-blue-700"
+          >
+            {showChart ? t('hideChart') : t('showChart')}
+          </button>
+        </div>
       </div>
 
       <div className="grid gap-2 mb-4">
-      {filteredLists.map(list => (
+        {filteredLists.map(list => (
           <div key={list.id} className="flex justify-between items-center">
             <button
               onClick={() => setActiveListId(list.id)}
@@ -48,7 +59,7 @@ function Toolbar() {
                 <span>{list.name}</span>
                 <div className="flex items-center gap-2">
                   <span className="text-sm text-gray-500 dark:text-gray-400">
-                  {itemCounts[list.id]} {t('item', itemCounts[list.id])}
+                    {itemCounts[list.id]} {t('item', itemCounts[list.id])}
                   </span>
                   <span className="text-sm text-gray-500 dark:text-gray-400">
                     {list.owner === loggedInUser ? `(${t('owner')})` : `(${t('member')})`}
@@ -95,4 +106,4 @@ function Toolbar() {
   );
 }
 
-export default Toolbar;
+export default ShoppingLists;

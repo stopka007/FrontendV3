@@ -1,27 +1,28 @@
-import React, { createContext, useMemo, useState, useContext } from 'react';
+import React, { createContext, useMemo, useState, useContext, useEffect } from 'react';
 import { UserContext } from "../Users/UserProvider.js";
+import {
+  loadListsFromStorage,
+  saveListsToStorage,
+  createNewList,
+  createNewItem,
+  updateList,
+  addItemToList,
+  updateItemInList,
+  deleteItemFromList
+} from './Extras/MockData.js';
 
 export const DetailContext = createContext();
 
 const DetailProvider = ({ children }) => {
   const { loggedInUser } = useContext(UserContext);
-  const [lists, setLists] = useState([
-    {
-      id: "tdl01",
-      name: "Nákupní seznam 1",
-      owner: "u1",
-      memberList: ["u2", "u3"],
-      itemList: [
-        {
-          id: "td01",
-          name: "Položka 1",
-          resolved: false,
-        },
-      ],
-    }
-  ]);
-  const [activeListId, setActiveListId] = useState("tdl01");
+  const [lists, setLists] = useState(() => loadListsFromStorage());
+  const [activeListId, setActiveListId] = useState(lists[0]?.id || null);
   const [showResolved, setShowResolved] = useState(false);
+
+  // Ukládání změn do localStorage
+  useEffect(() => {
+    saveListsToStorage(lists);
+  }, [lists]);
 
   const activeList = lists.find(list => list.id === activeListId);
 
@@ -42,101 +43,55 @@ const DetailProvider = ({ children }) => {
     
     handlerMap: {
       updateName: ({ id, name }) => {
-        setLists(current => 
-          current.map(list => 
-            list.id === id 
-              ? { ...list, name }
-              : list
-          )
-        );
+        setLists(current => updateList(current, id, { name }));
       },
       createList: ({ name }) => {
-        const newList = {
-          id: Math.random().toString(),
-          name: name,
-          owner: loggedInUser,
-          memberList: [],
-          itemList: [],
-        };
+        const newList = createNewList(name, loggedInUser);
         setLists(current => [...current, newList]);
         setActiveListId(newList.id);
       },
       addItem: ({ listId }) => {
-        setLists(current => current.map(list => 
-          list.id === listId 
-            ? {
-                ...list,
-                itemList: [
-                  ...list.itemList,
-                  { id: Math.random().toString(), name: "", resolved: false }
-                ]
-              }
-            : list
-        ));
+        const newItem = createNewItem();
+        setLists(current => addItemToList(current, listId, newItem));
       },
       updateItemName: ({ listId, itemId, name }) => {
-        setLists(current => current.map(list =>
-          list.id === listId
-            ? {
-                ...list,
-                itemList: list.itemList.map(item =>
-                  item.id === itemId ? { ...item, name } : item
-                )
-              }
-            : list
-        ));
+        setLists(current => updateItemInList(current, listId, itemId, { name }));
       },
       toggleResolveItem: ({ listId, itemId }) => {
-        setLists(current => current.map(list =>
-          list.id === listId
-            ? {
-                ...list,
-                itemList: list.itemList.map(item =>
-                  item.id === itemId ? { ...item, resolved: !item.resolved } : item
-                )
-              }
-            : list
-        ));
+        setLists(current => {
+          const list = current.find(l => l.id === listId);
+          const item = list?.itemList.find(i => i.id === itemId);
+          if (!item) return current;
+          return updateItemInList(current, listId, itemId, { resolved: !item.resolved });
+        });
       },
       deleteItem: ({ listId, itemId }) => {
-        setLists(current => current.map(list =>
-          list.id === listId
-            ? {
-                ...list,
-                itemList: list.itemList.filter(item => item.id !== itemId)
-              }
-            : list
-        ));
+        setLists(current => deleteItemFromList(current, listId, itemId));
       },
       addMember: ({ listId, memberId }) => {
-        setLists(current => current.map(list => 
-          list.id === listId
-            ? {
-                ...list,
-                memberList: list.memberList.includes(memberId)
-                  ? list.memberList
-                  : [...list.memberList, memberId]
-              }
-            : list
-        ));
+        setLists(current => {
+          const list = current.find(l => l.id === listId);
+          if (!list || list.memberList.includes(memberId)) return current;
+          return updateList(current, listId, {
+            memberList: [...list.memberList, memberId]
+          });
+        });
       },
       removeMember: ({ listId, memberId }) => {
-        setLists(current => current.map(list =>
-          list.id === listId
-            ? {
-                ...list,
-                memberList: list.memberList.filter(id => id !== memberId)
-              }
-            : list
-        ));
+        setLists(current => {
+          const list = current.find(l => l.id === listId);
+          if (!list) return current;
+          return updateList(current, listId, {
+            memberList: list.memberList.filter(id => id !== memberId)
+          });
+        });
       },
       deleteList: ({ listId }) => {
-        setLists(lists => {
-          const newLists = lists.filter(list => list.id !== listId);
+        setLists(current => {
+          const newLists = current.filter(list => list.id !== listId);
           if (listId === activeListId) {
             setActiveListId(newLists.length > 0 ? newLists[0].id : null);
           }
-          
           return newLists;
         });
       },

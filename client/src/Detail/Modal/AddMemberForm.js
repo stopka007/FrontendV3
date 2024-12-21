@@ -1,4 +1,4 @@
-import { useLanguage } from '../LanguageProvider';
+import { useLanguage } from '../Extras/LanguageProvider';
 
 function AddMemberForm({ show, userList, listId, handlerMap, handleClose }) {
   const { t } = useLanguage();
