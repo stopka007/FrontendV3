@@ -1,7 +1,5 @@
-// mockData.js
-import { v4 as uuidv4 } from 'uuid'; // Doporučuji přidat UUID pro generování ID
+import { v4 as uuidv4 } from 'uuid';
 
-// Výchozí mock data pro nákupní seznamy
 export const initialShoppingLists = [
   {
     id: "tdl01",
@@ -20,6 +18,7 @@ export const initialShoppingLists = [
         resolved: true,
       }
     ],
+    archived: false,
   },
   {
     id: "tdl02",
@@ -33,18 +32,18 @@ export const initialShoppingLists = [
         resolved: false,
       }
     ],
+    archived: false,
   }
 ];
 
-// Pomocné funkce pro práci s daty
-
 export const createNewList = (name, owner) => {
   return {
-    id: uuidv4(), // Generování unikátního ID
+    id: uuidv4(),
     name,
     owner,
     memberList: [],
     itemList: [],
+    archived: false,
   };
 };
 
@@ -56,7 +55,6 @@ export const createNewItem = (name = "") => {
   };
 };
 
-// Funkce pro uložení dat do localStorage
 export const saveListsToStorage = (lists) => {
   try {
     localStorage.setItem('shoppingLists', JSON.stringify(lists));
@@ -65,7 +63,6 @@ export const saveListsToStorage = (lists) => {
   }
 };
 
-// Funkce pro načtení dat z localStorage
 export const loadListsFromStorage = () => {
   try {
     const saved = localStorage.getItem('shoppingLists');
@@ -76,11 +73,14 @@ export const loadListsFromStorage = () => {
   }
 };
 
-// Funkce pro správu dat
 export const updateList = (lists, listId, updates) => {
-  return lists.map(list => 
+  return lists.map(list =>
     list.id === listId ? { ...list, ...updates } : list
   );
+};
+
+export const deleteList = (lists, listId) => {
+  return lists.filter(list => list.id !== listId);
 };
 
 export const addItemToList = (lists, listId, item) => {

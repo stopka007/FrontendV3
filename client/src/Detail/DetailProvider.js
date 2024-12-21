@@ -45,6 +45,9 @@ const DetailProvider = ({ children }) => {
       updateName: ({ id, name }) => {
         setLists(current => updateList(current, id, { name }));
       },
+      updateList: ({ listId, updates }) => {
+        setLists(current => updateList(current, listId, updates));
+      },
       createList: ({ name }) => {
         const newList = createNewList(name, loggedInUser);
         setLists(current => [...current, newList]);

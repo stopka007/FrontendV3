@@ -4,7 +4,6 @@ import { useLanguage } from '../Extras/LanguageProvider';
 
 const ListBarChart = ({ lists }) => {
   const { t } = useLanguage();
-
   // Prepare data for the chart
   const data = lists.map(list => ({
     name: list.name,
@@ -41,13 +40,14 @@ const ListBarChart = ({ lists }) => {
           axisLine={{ stroke: 'currentColor' }}
           className="text-gray-900 dark:text-white"
         />
-        <Tooltip />
+        <Tooltip cursor={false} />
         <Bar
           dataKey="items"
           name={t('items')}
           fill="#3B82F6"
           stroke="#1D4ED8"
           strokeWidth={2}
+          maxBarSize={60}
         />
       </BarChart>
     </div>

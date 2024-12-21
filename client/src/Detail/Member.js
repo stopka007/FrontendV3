@@ -1,6 +1,7 @@
+// Member.js - upravená verze
 import { useLanguage } from "./Extras/LanguageProvider";
 
-function Member({ userData, listId, handlerMap, isOwner, canManage }) {
+function Member({ userData, listId, handlerMap, isOwner, canManage, readonly }) {
   const { t } = useLanguage();
 
   return (
@@ -11,7 +12,7 @@ function Member({ userData, listId, handlerMap, isOwner, canManage }) {
           <span className="text-sm text-gray-500 dark:text-gray-400">({t('owner')})</span>
         )}
       </div>
-      {!isOwner && canManage && (
+      {!isOwner && canManage && !readonly && (
         <button
           onClick={() => handlerMap.removeMember({
             listId,

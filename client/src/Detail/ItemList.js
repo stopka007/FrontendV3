@@ -1,11 +1,13 @@
 import { useContext, useState, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import { DetailContext } from "./DetailProvider";
 import { useLanguage } from "./Extras/LanguageProvider";
 import Item from "./Item";
 import PieChart from "./Graphs/PieChart";
 
 function ItemList() {
-  const { lists, activeListId, handlerMap, showResolved, toggleShowResolved } = useContext(DetailContext);
+  const navigate = useNavigate();
+  const { lists, activeListId, handlerMap } = useContext(DetailContext);
   const { t } = useLanguage();
   const [showChart, setShowChart] = useState(false);
  
@@ -21,58 +23,84 @@ function ItemList() {
   }, [activeList]);
 
   if (!activeList) return null;
+  const isArchived = activeList.archived;
 
-  const filteredItems = showResolved
-    ? activeList.itemList
-    : activeList.itemList.filter(item => !item.resolved);
+  const unresolvedItems = activeList.itemList.filter(item => !item.resolved);
+  const resolvedItems = activeList.itemList.filter(item => item.resolved);
 
   return (
-    <div className="border-2 border-green-500 dark:border-green-400 m-3 p-3 min-h-[110px] bg-white dark:bg-slate-800 transition-colors duration-200">
-      <div className="flex flex-col h-full">
-        <div className="flex gap-2 mb-4">
-          <button
-            onClick={() => handlerMap.addItem({ listId: activeListId })}
-            className="px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600 flex items-center gap-2 dark:bg-green-600 dark:hover:bg-green-700"
-          >
-            {t('addItem')}
-            <span className="text-lg">+</span>
-          </button>
-          <button
-            onClick={() => toggleShowResolved()}
-            className="px-3 py-1 bg-gray-200 dark:bg-slate-600 rounded hover:bg-gray-300 dark:hover:bg-slate-500 dark:text-white"
-          >
-            {showResolved ? t('showUnresolved') : t('showAll')}
-          </button>
-          <button
-            onClick={() => setShowChart(prev => !prev)}
-            className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 flex items-center gap-2 dark:bg-blue-600 dark:hover:bg-blue-700"
-          >
-            {showChart ? "Zobrazit položky" : "Zobrazit jako graf"}
-          </button>
-        </div>
-        
-        <div className="flex-grow">
-          {showChart ? (
-            <div className="flex justify-center items-start">
-              <PieChart
-                resolved={stats.resolved}
-                unresolved={stats.unresolved}
-              />
-            </div>
-          ) : (
-            <div className="grid gap-2">
-              {filteredItems.map((item) => (
-                <Item
-                  key={item.id}
-                  data={item}
-                  listId={activeListId}
-                  handlerMap={handlerMap}
-                />
-              ))}
-            </div>
+    <div className="p-3 h-full flex flex-col">
+      {/* Header section - centered */}
+        <div className="flex justify-center items-center mb-6">
+          <div className="flex gap-2">
+           {!isArchived && (
+            <button
+              onClick={() => handlerMap.addItem({ listId: activeListId })}
+              className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 flex items-center gap-2 dark:bg-green-600 dark:hover:bg-green-700 transition-colors"
+            >
+              {t('addItem')}
+              <span className="text-lg">+</span>
+            </button>
           )}
+            <button
+              onClick={() => setShowChart(prev => !prev)}
+              className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 flex items-center gap-2 dark:bg-blue-600 dark:hover:bg-blue-700 transition-colors"
+            >
+              {showChart ? t('showItems') : t('showChart')}
+            </button>
+            <button
+              onClick={() => navigate('/member')}
+              className="px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 dark:bg-purple-600 dark:hover:bg-purple-700 transition-colors lg:hidden"
+            >
+              {t('showMembers')}
+            </button>
+          </div>
         </div>
-      </div>
+     
+      {showChart ? (
+        <div className="flex justify-center items-start">
+          <PieChart
+            resolved={stats.resolved}
+            unresolved={stats.unresolved}
+          />
+        </div>
+      ) : (
+        <div className="overflow-y-auto max-h-[calc(100vh-12rem)]">
+          <div className="max-w-3xl mx-auto px-4">
+            {/* Nevyřízené položky */}
+            <div className="mb-8">
+              <h3 className="text-lg font-semibold mb-4 dark:text-white">{t('unresolved')}</h3>
+              <div className="grid gap-3">
+                {unresolvedItems.map((item) => (
+                  <Item
+                    key={item.id}
+                    data={item}
+                    listId={activeListId}
+                    handlerMap={handlerMap}
+                    readonly={isArchived}
+                  />
+                ))}
+              </div>
+            </div>
+           
+            {/* Vyřízené položky */}
+            <div>
+              <h3 className="text-lg font-semibold mb-4 dark:text-white">{t('resolved')}</h3>
+              <div className="grid gap-3">
+                {resolvedItems.map((item) => (
+                  <Item
+                    key={item.id}
+                    data={item}
+                    listId={activeListId}
+                    handlerMap={handlerMap}
+                    readonly={isArchived}
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

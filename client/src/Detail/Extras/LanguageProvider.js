@@ -34,6 +34,11 @@ const translations = {
     item_few: 'Items',
     item_many: 'Items',
     items: "Items",
+    login: "Login",
+    logout: "Logout",
+    Archive: "Archive",
+    showArchived: "Show Archived",
+    showActive: "Show Active"
   },
   cs: {
     shoppingLists: "Nákupní seznamy",
@@ -66,6 +71,11 @@ const translations = {
     item_few: 'Položky',
     item_many: 'Položek',
     items: "Položky",
+    login: "Přihlásit se",
+    logout: "Odhlásit se",
+    Archive: "Archivovat",
+    showArchived: "Zobrazit Archivované",
+    showActive: "Zobrazit aktivní"
   },
 };
 

@@ -3,11 +3,11 @@ import { createContext, useState } from "react";
 export const UserContext = createContext();
 
 function UserProvider({ children }) {
-  const [loggedInUser, setLoggedInUser] = useState("u1");
+  const [loggedInUser, setLoggedInUser] = useState(null);
   const userMap = {
     u1: {
       id: "u1",
-      name: "Admin",
+      name: "Chance",
     },
     u2: {
       id: "u2",
