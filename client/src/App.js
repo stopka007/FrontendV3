@@ -5,7 +5,7 @@ import UserProvider from "./Users/UserProvider";
 import ThemeProvider from "./Detail/Extras/ThemeProvider";
 import LanguageProvider from "./Detail/Extras/LanguageProvider";
 import DetailProvider from "./Detail/DetailProvider";
-import Home from "./Detail/Home"; // Add this import
+import Home from "./Detail/Home";
 
 function App() {
   return (
@@ -17,7 +17,7 @@ function App() {
               <UserProvider>
                 <DetailProvider>
                   <Routes>
-                    <Route path="/" element={<Home />} /> {/* Update this line */}
+                    <Route path="/" element={<Home />} />
                     <Route path="/shoppingLists" element={<Detail />} />
                     <Route path="/detail" element={<Detail />} />
                     <Route path="/member" element={<Detail />} />

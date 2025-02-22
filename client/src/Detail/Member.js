@@ -1,4 +1,3 @@
-// Member.js - upravená verze
 import { useLanguage } from "./Extras/LanguageProvider";
 
 function Member({ userData, listId, handlerMap, isOwner, canManage, readonly }) {

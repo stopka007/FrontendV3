@@ -4,7 +4,6 @@ import { useLanguage } from '../Extras/LanguageProvider';
 
 const ListBarChart = ({ lists }) => {
   const { t } = useLanguage();
-  // Prepare data for the chart
   const data = lists.map(list => ({
     name: list.name,
     items: list.itemList.length,

@@ -4,12 +4,10 @@ export const UserContext = createContext();
 
 function UserProvider({ children }) {
   const [loggedInUser, setLoggedInUser] = useState(() => {
-    // Při inicializaci zkontroluj localStorage
     const savedUser = localStorage.getItem('loggedInUser');
     return savedUser || null;
   });
 
-  // Při změně uživatele ulož do localStorage
   useEffect(() => {
     if (loggedInUser) {
       localStorage.setItem('loggedInUser', loggedInUser);

@@ -19,7 +19,6 @@ const DetailProvider = ({ children }) => {
   const [activeListId, setActiveListId] = useState(lists[0]?.id || null);
   const [showResolved, setShowResolved] = useState(false);
 
-  // Ukládání změn do localStorage
   useEffect(() => {
     saveListsToStorage(lists);
   }, [lists]);

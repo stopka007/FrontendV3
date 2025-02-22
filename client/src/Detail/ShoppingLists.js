@@ -1,4 +1,3 @@
-// ShoppingLists.js
 import { useContext, useState } from "react";
 import { DetailContext } from "./DetailProvider";
 import { UserContext } from "../Users/UserProvider";
@@ -38,7 +37,7 @@ function ShoppingLists({ onListSelect }) {
   };
 
   const getMaxHeight = () => {
-    const baseHeight = "calc(100vh - 16rem)"; // Adjusted for new layout
+    const baseHeight = "calc(100vh - 16rem)"; 
     return showChart ? "calc(100vh - 40rem)" : baseHeight;
   };
 

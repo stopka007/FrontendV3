@@ -1,4 +1,3 @@
-// Item.js - upravená verze
 import { useState } from "react";
 import { useLanguage } from "./Extras/LanguageProvider";
 

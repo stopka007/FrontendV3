@@ -30,7 +30,6 @@ function ItemList() {
 
   return (
     <div className="p-3 h-full flex flex-col">
-      {/* Header section - centered */}
         <div className="flex justify-center items-center mb-6">
           <div className="flex gap-2">
            {!isArchived && (
@@ -67,7 +66,6 @@ function ItemList() {
       ) : (
         <div className="overflow-y-auto max-h-[calc(100vh-12rem)]">
           <div className="max-w-3xl mx-auto px-4">
-            {/* Nevyřízené položky */}
             <div className="mb-8">
               <h3 className="text-lg font-semibold mb-4 dark:text-white">{t('unresolved')}</h3>
               <div className="grid gap-3">
@@ -82,8 +80,6 @@ function ItemList() {
                 ))}
               </div>
             </div>
-           
-            {/* Vyřízené položky */}
             <div>
               <h3 className="text-lg font-semibold mb-4 dark:text-white">{t('resolved')}</h3>
               <div className="grid gap-3">
